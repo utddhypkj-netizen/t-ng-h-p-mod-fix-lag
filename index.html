@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhập Key - Lấy Link</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Be Vietnam Pro', -apple-system, sans-serif;
+        }
+
+        /* ====== NỀN ĐỘNG ====== */
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a1a;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Các quả cầu gradient bay lơ lửng */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px; height: 400px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            top: -100px; left: -100px;
+        }
+
+        .orb-2 {
+            width: 350px; height: 350px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            bottom: -100px; right: -100px;
+            animation-delay: -7s;
+        }
+
+        .orb-3 {
+            width: 300px; height: 300px;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            top: 50%; left: 50%;
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(60px, -40px) scale(1.1); }
+            66% { transform: translate(-40px, 50px) scale(0.9); }
+        }
+
+        /* Lớp phủ tối */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(10, 10, 26, 0.7) 100%);
+            pointer-events: none;
+        }
+
+        /* ====== KHUNG CHÍNH (GLASSMORPHISM) ====== */
+        .container {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 44px 36px;
+            border-radius: 24px;
+            box-shadow:
+                0 25px 50px -12px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            width: 100%;
+            max-width: 440px;
+            animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ====== LOGO ICON ====== */
+        .logo {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5); }
+            50% { box-shadow: 0 10px 45px rgba(102, 126, 234, 0.8); }
+        }
+
+        .logo svg {
+            width: 32px;
+            height: 32px;
+            stroke: #fff;
+            stroke-width: 2.2;
+            fill: none;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 8px;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.55);
+            margin-bottom: 32px;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        /* ====== INPUT ====== */
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            font-size: 13.5px;
+            letter-spacing: 0.2px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            width: 18px;
+            height: 18px;
+            stroke: rgba(255, 255, 255, 0.5);
+            fill: none;
+            stroke-width: 2;
+            pointer-events: none;
+            transition: stroke 0.3s ease;
+            z-index: 2;
+        }
+
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 15px 52px 15px 46px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            font-size: 15px;
+            color: #fff;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            outline: none;
+        }
+
+        input[type="password"]::placeholder,
+        input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: normal;
+            font-weight: 400;
+        }
+
+        input[type="password"]:focus,
+        input[type="text"]:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(139, 157, 255, 0.7);
+            box-shadow:
+                0 0 0 4px rgba(102, 126, 234, 0.15),
+                0 8px 24px rgba(102, 126, 234, 0.15);
+        }
+
+        input[type="password"]:focus ~ .input-icon,
+        input[type="text"]:focus ~ .input-icon {
+            stroke: #8b9dff;
+        }
+
+        /* Nút con mắt */
+        .toggle-btn {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+            z-index: 2;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .toggle-btn svg {
+            width: 19px;
+            height: 19px;
+            stroke: rgba(255, 255, 255, 0.6);
+            fill: none;
+            stroke-width: 2;
+            transition: stroke 0.2s ease;
+        }
+
+        .toggle-btn:hover svg {
+            stroke: #fff;
+        }
+
+        /* ====== NÚT SUBMIT ====== */
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 6px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 15.5px;
+            font-weight: 600;
+            font-family: inherit;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.35);
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:active {
+            transform: translateY(0) scale(0.99);
+        }
+
+        /* ====== KẾT QUẢ ====== */
+        .result {
+            margin-top: 24px;
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .result.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .result-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 500;
+            font-size: 13.5px;
+        }
+
+        .result-label svg {
+            width: 16px;
+            height: 16px;
+            stroke: #4ade80;
+            fill: none;
+            stroke-width: 2.5;
+        }
+
+        .link-box {
+            display: flex;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            padding: 6px;
+            align-items: center;
+            transition: border-color 0.3s ease;
+        }
+
+        .link-box:hover {
+            border-color: rgba(139, 157, 255, 0.4);
+        }
+
+        .link-box input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 10px 12px;
+            font-size: 13.5px;
+            color: #a5b4fc;
+            outline: none;
+            font-weight: 500;
+            box-shadow: none;
+            letter-spacing: 0.2px;
+        }
+
+        .link-box input:focus {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+
+        .copy-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            font-size: 13px;
+            font-family: inherit;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .copy-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .copy-btn.copied {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+
+        .copy-btn svg {
+            width: 14px;
+            height: 14px;
+            stroke: #fff;
+            fill: none;
+            stroke-width: 2.2;
+        }
+
+        /* ====== THÔNG BÁO LỖI ====== */
+        .error {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            margin-top: 14px;
+            padding: 12px 16px;
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            color: #fca5a5;
+            font-size: 13.5px;
+            font-weight: 500;
+            animation: shake 0.4s ease;
+        }
+
+        .error.show {
+            display: flex;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        .error svg {
+            width: 17px;
+            height: 17px;
+            stroke: #fca5a5;
+            fill: none;
+            stroke-width: 2.2;
+            flex-shrink: 0;
+        }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 480px) {
+            .container {
+                padding: 32px 24px;
+                border-radius: 20px;
+            }
+            h1 { font-size: 22px; }
+            .logo { width: 56px; height: 56px; }
+            .logo svg { width: 28px; height: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Nền động -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+            </svg>
+        </div>
+
+        <h1>Nhập Key</h1>
+        <p class="subtitle">Nhập key để nhận link của bạn</p>
+
+        <div class="input-group">
+            <label for="keyInput">Key của bạn</label>
+            <div class="input-wrapper">
+                <!-- Icon ổ khóa -->
+                <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+
+                <input type="password" id="keyInput" placeholder="Nhập key tại đây..." autocomplete="off">
+
+                <!-- Nút con mắt -->
+                <button type="button" class="toggle-btn" id="toggleBtn" onclick="toggleKey()" title="Hiện/Ẩn key">
+                    <svg id="eyeIcon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <button class="submit-btn" onclick="getLink()">Lấy Link</button>
+
+        <!-- Thông báo lỗi -->
+        <div class="error" id="errorMsg">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span id="errorText">Key không hợp lệ, vui lòng thử lại!</span>
+        </div>
+
+        <!-- Kết quả -->
+        <div class="result" id="resultBox">
+            <label class="result-label">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 6L9 17l-5-5"/>
+                </svg>
+                Link của bạn
+            </label>
+            <div class="link-box">
+                <input type="text" id="linkOutput" readonly>
+                <button class="copy-btn" id="copyBtn" onclick="copyLink()">
+                    <svg id="copyIcon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                    </svg>
+                    <span id="copyText">Sao chép</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ====== CẤU HÌNH ======
+        const VALID_KEY = "IKztadztop1VN";
+        const LINK_TO_SHOW = "https://www.mediafire.com/file/zw9mkuzbzov5wfg/MG.zip";
+        // ======================
+
+        const keyInput = document.getElementById('keyInput');
+        const toggleBtn = document.getElementById('toggleBtn');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        // Icon con mắt mở
+        const EYE_OPEN = `
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+        `;
+
+        // Icon con mắt gạch chéo (đang hiện key)
+        const EYE_CLOSED = `
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+            <line x1="1" y1="1" x2="23" y2="23"/>
+        `;
+
+        // Bật/tắt hiện key
+        function toggleKey() {
+            if (keyInput.type === 'password') {
+                keyInput.type = 'text';
+                eyeIcon.innerHTML = EYE_CLOSED;
+            } else {
+                keyInput.type = 'password';
+                eyeIcon.innerHTML = EYE_OPEN;
+            }
+            keyInput.focus();
+        }
+
+        // Lấy link
+        function getLink() {
+            const resultBox = document.getElementById('resultBox');
+            const errorMsg = document.getElementById('errorMsg');
+            const errorText = document.getElementById('errorText');
+            const linkOutput = document.getElementById('linkOutput');
+            const key = keyInput.value.trim();
+
+            // Reset
+            resultBox.classList.remove('show');
+            errorMsg.classList.remove('show');
+
+            // Validate rỗng
+            if (!key) {
+                errorText.textContent = 'Vui lòng nhập key!';
+                errorMsg.classList.add('show');
+                keyInput.focus();
+                return;
+            }
+
+            // Kiểm tra key
+            if (key === VALID_KEY) {
+                linkOutput.value = LINK_TO_SHOW;
+                resultBox.classList.add('show');
+            } else {
+                errorText.textContent = 'Key không hợp lệ, vui lòng thử lại!';
+                errorMsg.classList.add('show');
+                // Hiệu ứng rung lặp lại
+                errorMsg.style.animation = 'none';
+                setTimeout(() => errorMsg.style.animation = 'shake 0.4s ease', 10);
+            }
+        }
+
+        // Sao chép link
+        function copyLink() {
+            const linkOutput = document.getElementById('linkOutput');
+            const copyBtn = document.getElementById('copyBtn');
+            const copyText = document.getElementById('copyText');
+            const copyIcon = document.getElementById('copyIcon');
+
+            if (!linkOutput.value) return;
+
+            const successIcon = `<path d="M20 6L9 17l-5-5"/>`;
+            const copyIconSvg = `
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            `;
+
+            const doCopy = () => {
+                copyBtn.classList.add('copied');
+                copyText.textContent = 'Đã chép';
+                copyIcon.innerHTML = successIcon;
+
+                setTimeout(() => {
+                    copyBtn.classList.remove('copied');
+                    copyText.textContent = 'Sao chép';
+                    copyIcon.innerHTML = copyIconSvg;
+                }, 2000);
+            };
+
+            navigator.clipboard.writeText(linkOutput.value).then(doCopy).catch(() => {
+                linkOutput.select();
+                document.execCommand('copy');
+                doCopy();
+            });
+        }
+
+        // Nhấn Enter
+        keyInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') getLink();
+        });
+
+        // Tự ẩn lỗi khi gõ lại
+        keyInput.addEventListener('input', function () {
+            document.getElementById('errorMsg').classList.remove('show');
+        });
+    </script>
+</body>
+</html>
